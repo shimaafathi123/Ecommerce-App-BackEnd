@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
+from product.models import Product
 from user.models import Address
 
 User = get_user_model()
@@ -38,5 +39,20 @@ class Order(models.Model):
             return Response({'error': 'you are not allowed to view this order'}, status=status.HTTP_403_FORBIDDEN)
         return order
 
-# Create your models here.
- 
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.product.name}__{self.quantity}"
+
+    def get_item_price(self):
+        return self.quantity * self.product.price
+
+    def save(self, *args, **kwargs):
+        self.price = self.get_item_price()
+        super().save(*args, **kwargs)
+        self.order.total_price += self.price
+        self.order.save()
