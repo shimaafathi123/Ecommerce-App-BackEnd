@@ -40,8 +40,41 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+
     #custom apps
+    'user',
+    'order',
+    'wishlist',
+    'category',
+    'shopping_cart',
+    'product',
+    
+    
+    'rest_framework',
+    'rest_framework_jwt',
+    'corsheaders',
 ]
+
+AUTH_USER_MODEL = 'user.User'#when use abstractuser model
+
+#configure authentication classes->me
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+       # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # Add other authentication classes if needed
+    ],
+    # Other REST framework settings...
+}
+
+# Django Simple JWT settings
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
