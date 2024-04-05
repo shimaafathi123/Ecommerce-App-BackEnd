@@ -4,7 +4,7 @@ from product.serializers import ProductSerializer
 from user.serializers import AddressSerializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product = ProductSerializer()
 
     class Meta:
         model = OrderItem
