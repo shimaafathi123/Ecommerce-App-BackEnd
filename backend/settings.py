@@ -44,11 +44,11 @@ INSTALLED_APPS = [
     'order',
     'wishlist',
     'category',
-    'shopping_cart',
+    
     'product',
     
     
-    'rest_framework',
+   
     'rest_framework_jwt',
     'corsheaders',
 ]

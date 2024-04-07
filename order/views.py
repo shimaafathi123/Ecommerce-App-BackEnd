@@ -1,5 +1,5 @@
 from .models import Order, OrderItem, User
-from shopping_cart.models import Cart, Cart_Item
+#from shopping_cart.models import Cart, Cart_Item
 from user.models import Profile
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,9 +10,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.conf import settings
-import stripe
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class user_order(APIView):
@@ -23,52 +21,6 @@ class user_order(APIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
-class check_out(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def post(self, request):
-        try:
-            cart = Cart.objects.get(user=request.user)
-        except Cart.DoesNotExist:
-            return Response({'error': 'Cart does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
-        cart_items = Cart_Item.objects.filter(cart=cart)
-
-        if not cart_items:
-            return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-
-        for item in cart_items:
-            if item.quantity > item.product.quantity:
-                return Response({'error': f'Product {item.product.name} is out of stock'}, status=status.HTTP_400_BAD_REQUEST)
-
-        line_items = []
-        for item in cart_items:
-            product_name = item.product.name
-            price = int(item.product.price * 100)
-            line_item = {
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {
-                        'name': product_name,
-                    },
-                    'unit_amount': price
-                },
-                'quantity': item.quantity
-            }
-            line_items.append(line_item)
-        try:
-            base_url = request.scheme + '://' + request.get_host()
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=line_items, 
-                mode='payment',
-                success_url=f'{base_url}/orders/create/?user={request.user.pk}',
-                cancel_url=f'{base_url}/users/cart/',
-            )
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'url': checkout_session.url})
 
 
 class create_order(APIView):
