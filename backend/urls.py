@@ -9,11 +9,11 @@ from product.views import ProductDetail, ProductList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('products/', ProductList.as_view(), name='product-list'),
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'),
-
-    path('users/cart/', include('shopping_cart.urls'))
+    path('users/cart/', include('shopping_cart.urls')),
+    path('users/wishlist/', include('wishlist.urls')),
+    path('orders/', include('order.urls')),
     ]
 
 
