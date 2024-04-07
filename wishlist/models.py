@@ -15,3 +15,9 @@ class Wishlist_Item(models.Model):
     wish_list = models.ForeignKey(Wishlist, on_delete=models.CASCADE, related_name="favs")
     def __str__(self):
         return self.product.name
+
+
+
+
+
+
