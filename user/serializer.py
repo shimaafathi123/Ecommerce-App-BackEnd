@@ -3,6 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from drf_extra_fields.fields import Base64ImageField
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -44,9 +45,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
+   # image = Base64ImageField()
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = [ 'full_name', 'about', 'gender', 'country', 'city', 'state', 'address', 'date']
+        #fields = '__all__'
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
