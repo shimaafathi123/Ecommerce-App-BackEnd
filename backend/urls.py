@@ -13,6 +13,7 @@ urlpatterns = [
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'),
     path('users/wishlist/', include('wishlist.urls')),
     path('orders/', include('order.urls')),
+    path('cart/', include('shopping_cart.urls'))
     ]
 
 
