@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'category',
     'shopping_cart',
     'product',
+    'order',
     
     'rest_framework_jwt',
     'corsheaders',

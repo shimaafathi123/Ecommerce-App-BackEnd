@@ -13,7 +13,8 @@ urlpatterns = [
     path('users/wishlist/', include('wishlist.urls')),
     path('cart/', include('shopping_cart.urls')),
     path('categories/', CategoryListView.as_view(), name='category-list'),
-    path('products/category/<int:category_id>/', ProductList.as_view(), name='products-by-category'),  # Use ProductList view for listing products by category
+    path('orders/', include('order.urls')),
+    path('products/category/<int:category_id>/', ProductList.as_view(), name='products-by-category'),  
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

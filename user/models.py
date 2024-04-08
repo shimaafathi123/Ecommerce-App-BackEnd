@@ -51,28 +51,37 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-def save_user_profile(sender, instance, **kwargs):
-     #profile, created = Profile.objects.get_or_create(user=instance)
-     #profile.save()  
-    #user = instance
-    #profile = instance.profile
-    #user.full_name = profile.full_name
-    #user.email = profile.email
-    #user.phone = profile.phone
-    #instance.profile.save()
-    #user.save()
+# def save_user_profile(sender, instance, **kwargs):
+#      #profile, created = Profile.objects.get_or_create(user=instance)
+#      #profile.save()  
+#     #user = instance
+#     #profile = instance.profile
+#     #user.full_name = profile.full_name
+#     #user.email = profile.email
+#     #user.phone = profile.phone
+#     #instance.profile.save()
+#     #user.save()
     
       
-    profile = instance.user.profile
-    print(profile.email)
-    print(profile)
-    User = get_user_model()
+#     profile = instance.user.profile
+#     print(profile.email)
+#     print(profile)
+#     User = get_user_model()
     
-    User.objects.filter(pk=instance.pk).update(
-        full_name=profile.full_name,
-        email=profile.email,  # Update user's email based on profile's email
-        phone=profile.phone
-    )
+#     User.objects.filter(pk=instance.pk).update(
+#         full_name=profile.full_name,
+#         email=profile.email,  # Update user's email based on profile's email
+#         phone=profile.phone
+#     )
+def save_user_profile(sender, instance, **kwargs):
+    if hasattr(instance, 'profile'):
+        profile = instance.profile
+        User = get_user_model()
+        User.objects.filter(pk=instance.pk).update(
+            full_name=profile.full_name,
+            email=profile.email,
+            phone=profile.phone
+        )
     
 
 post_save.connect(create_user_profile, sender=User)
