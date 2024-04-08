@@ -48,7 +48,7 @@ class ProfileSerializer(serializers.ModelSerializer):
    # image = Base64ImageField()
     class Meta:
         model = Profile
-        fields = [ 'full_name', 'about', 'gender', 'country', 'city', 'state', 'address', 'date']
+        fields = [ 'full_name','email','phone', 'about', 'gender', 'country', 'city', 'state', 'address', 'date']
         #fields = '__all__'
 
     def to_representation(self, instance):
