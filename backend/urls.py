@@ -5,6 +5,7 @@ from django.urls import path, include  # Import include function
 from django.conf import settings
 from django.conf.urls.static import static
 
+from category.views import CategoryListView
 from product.views import ProductDetail, ProductList
 
 urlpatterns = [
@@ -13,8 +14,9 @@ urlpatterns = [
     path('products/', ProductList.as_view(), name='product-list'),
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'),
     path('users/wishlist/', include('wishlist.urls')),
-    path('orders/', include('order.urls')),
-    path('cart/', include('shopping_cart.urls'))
+    path('cart/', include('shopping_cart.urls')),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+
     ]
 
 
