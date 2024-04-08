@@ -16,6 +16,7 @@ urlpatterns = [
     path('users/wishlist/', include('wishlist.urls')),
     path('cart/', include('shopping_cart.urls')),
     path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('orders/', include('order.urls')),
 
     ]
 
