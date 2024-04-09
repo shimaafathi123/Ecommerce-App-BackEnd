@@ -66,13 +66,13 @@ class CreateCheckout(APIView):
 
 #-----------------------------------------------------
 
-# class user_orders(APIView):
-#     permission_classes = [IsAuthenticated]
+class user_orders(APIView):
+    permission_classes = [IsAuthenticated]
 
-#     def get(self, request):
-#         orders = Order.objects.filter(user=request.user)
-#         serializer = OrderSerializer(orders, many=True)
-#         return Response(serializer.data)
+    def get(self, request):
+        orders = Order.objects.filter(user=request.user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
 
 class create_order(APIView):
