@@ -1,5 +1,5 @@
 from .models import Order, OrderItem, User
-#from shopping_cart.models import Cart, Cart_Item
+from shopping_cart.models import Cart, CartItem
 from user.models import Profile
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,8 +12,7 @@ from django.shortcuts import redirect
 from django.conf import settings
 
 
-
-class user_order(APIView):
+class user_orders(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -22,17 +21,16 @@ class user_order(APIView):
         return Response(serializer.data)
 
 
-
 class create_order(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user_pk = self.request.GET.get('user')
         user = User.objects.get(pk=user_pk)
-        user_address = Address.objects.filter(user=user).first()
+        user_address = Profile.objects.filter(user=user).first()
 
         cart = Cart.objects.get(user=user)
-        cart_items = Cart_Item.objects.filter(cart=cart)
+        cart_items = CartItem.objects.filter(cart=cart)
 
         order = Order.objects.create(user=user, shipping_address=user_address)
         order.save()
@@ -53,6 +51,7 @@ class create_order(APIView):
             return redirect('http://localhost:3000/orders')
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
+
 class order_details(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -60,17 +59,6 @@ class order_details(APIView):
         order = Order.get_order_by_user(self, request.user, pk)
         if type(order) == Response:
             return order
-        serializer = OrderSerializer(order)
-        return Response(serializer.data)
-
-class order_details(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-        order = Order.objects.filter(user=request.user, pk=pk).first()
-        if not order:
-            return Response({'error': 'order does not exist !!'}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
@@ -89,4 +77,3 @@ class cancel_order(APIView):
         order.status = 'canceled'
         order.save()
         return Response({'message': 'Order cancelled successfully'}, status=status.HTTP_200_OK)
-    
