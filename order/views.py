@@ -35,7 +35,7 @@ class CreateCheckout(APIView):
         line_items = []
         for item in cart_items:
             product_name = item.product.name
-            price = item.product.price * 100  # Stripe requires the price in cents
+            price = item.product.price * 100  
             line_item = {
                 'price_data' :{
                     'currency' : 'usd',  
