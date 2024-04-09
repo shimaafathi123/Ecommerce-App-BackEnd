@@ -15,6 +15,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STRIPE_SECRET_KEY = 'your_stripe_secret_key_here'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -125,7 +127,8 @@ DATABASES = {
     }
 }
 
-
+STRIPE_SECRET_KEY = 'sk_test_51N5EzLFB7LMN2Ut7xOcCPl0wNbKlkJ1qjYRPvwJb2mm0J6pAXJOfeU45jXnOjPSyaxHpdEjH3W4YNqwvccETS4CL00HWqsguSW'
+STRIPE_WEBHOOK_SECRET = 'whsec_d7e99f95c90da8a23d7cfef5e9921ce10337251c80f5c1a0657a983859dc58a6'
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

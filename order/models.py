@@ -1,6 +1,7 @@
 from django.db import models
 from product.models import Product
 from user.models import Profile
+from user.models import User
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
@@ -62,3 +63,12 @@ class OrderItem(models.Model):
         super(OrderItem, self).save(*args, **kwargs)
         self.order.total_price += self.price
         self.order.save()
+
+class PaymentToken(models.Model):
+    Ptoken = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.BooleanField()
+    
+
+    def __str__(self):
+        return self.Ptoken
