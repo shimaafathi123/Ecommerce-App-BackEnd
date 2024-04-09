@@ -10,3 +10,5 @@ class Product(models.Model):
     rating = models.FloatField()
     quantity = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE) 
+    def related_products(self):
+        return Product.objects.filter(category_id=self.category_id).exclude(id=self.id)[:5]  
