@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from shopping_cart.models import CartItem, Cart
-from .serializers import CartSerializer, AddToCartSerializer, UpdateCartSerializer
+from shopping_cart.models import Cart, CartItem
+from shopping_cart.serializers import AddToCartSerializer, UpdateCartSerializer, CartSerializer
 from rest_framework.permissions import IsAuthenticated
 from product.models import Product
 
@@ -35,10 +35,10 @@ class CartDetailView(generics.RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
+    def get_queryset(self):
         user_id = self.request.user.id
-        cart = Cart.objects.filter(user=user_id).first()
-        return cart
+        print(user_id)
+        return Cart.objects.filter(user=user_id)
 
 
 class DeleteCartItemView(generics.DestroyAPIView):
