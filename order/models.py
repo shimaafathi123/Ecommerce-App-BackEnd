@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
 import uuid
+from django.utils import timezone
+from datetime import timedelta
+
 
 
 User = get_user_model()
@@ -20,6 +23,7 @@ class Order(models.Model):
     transaction_id = models.UUIDField(default=uuid.uuid4, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
+    delivered_date = models.DateTimeField(default=timezone.now() + timedelta(days=3), editable=False)
     shipping_address = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
