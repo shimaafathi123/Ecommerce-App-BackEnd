@@ -4,6 +4,8 @@ from user.models import Profile
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
+import uuid
+
 
 User = get_user_model()
 
@@ -13,7 +15,8 @@ class Order(models.Model):
     DELIVERED = "delivered"
     CANCELED = "canceled"
     STATUS_CHOICES = ((PENDING, "pending"), (SHIPPED, "shipped"), (DELIVERED, "delivered"), (CANCELED, "canceled"))
-
+    
+    transaction_id = models.UUIDField(default=uuid.uuid4, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
     shipping_address = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
