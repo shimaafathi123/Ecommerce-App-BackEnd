@@ -24,14 +24,12 @@ class CreateCheckout(APIView):
         cart = Cart.objects.get(user=user)
         cart_items = CartItem.objects.filter(cart=cart)
         
-        # validation before checkout
         if not cart_items:
             return Response({"detail": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
         for item in cart_items:
             if item.quantity > item.product.available_quantity:
                 return Response({'detail': f"Sorry, we do not have enough stock for {item.product.name}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        #make checkout Session
         line_items = []
         for item in cart_items:
             product_name = item.product.name
@@ -48,11 +46,11 @@ class CreateCheckout(APIView):
             }
             line_items.append(line_item)
         try:
-            token = secrets.token_hex(16) # generate payment token
+            token = secrets.token_hex(16) 
             base_url = request.scheme + '://' + request.get_host()
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
-                line_items=line_items,  # include the line_items parameter here
+                line_items=line_items,  
                 mode='payment',
                 success_url= f'{base_url}/orders/create?token={token}&user={user.id}',
                 cancel_url= f'{base_url}/orders/create',
@@ -61,7 +59,7 @@ class CreateCheckout(APIView):
             pToken.save()
         except AuthenticationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        # return redirect(checkout_session.url , code=303)
+        
         return Response({'url': checkout_session.url})
 
 #-----------------------------------------------------
