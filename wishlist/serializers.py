@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Wishlist, Wishlist_Item
-from user.serializer import RegisterSerializer
+from user.serializers import RegisterSerializer
 from product.serializers import Product
 
 
@@ -20,11 +20,11 @@ class ViewWishlistItemSerializer(serializers.ModelSerializer):
 
 class WishListSerializer(serializers.ModelSerializer):
     user = RegisterSerializer(read_only=True)
-    favs = ViewWishlistItemSerializer(many=True)
+    fav_items = ViewWishlistItemSerializer(many=True)
 
     class Meta:
         model = Wishlist
-        fields = ['user', 'favs']
+        fields = ['user', 'fav_items']
 
 
 class EditWishlistItemSerializer(serializers.ModelSerializer):
