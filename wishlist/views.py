@@ -8,7 +8,7 @@ from .serializers import WishListSerializer, EditWishlistItemSerializer
 
 
 # Create your views here.
-class WishlistDetail(generics.ListCreateAPIView):
+class user_wishlist(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = WishListSerializer
 
@@ -18,7 +18,7 @@ class WishlistDetail(generics.ListCreateAPIView):
         return Wishlist.objects.filter(user=user_id)
 
 
-class CartItem_create(generics.CreateAPIView):
+class create_item(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = EditWishlistItemSerializer
 
