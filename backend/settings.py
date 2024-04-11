@@ -127,8 +127,8 @@ DATABASES = {
     }
 }
 
-STRIPE_SECRET_KEY = 'sk_test_51N5EzLFB7LMN2Ut7xOcCPl0wNbKlkJ1qjYRPvwJb2mm0J6pAXJOfeU45jXnOjPSyaxHpdEjH3W4YNqwvccETS4CL00HWqsguSW'
-STRIPE_WEBHOOK_SECRET = 'whsec_d7e99f95c90da8a23d7cfef5e9921ce10337251c80f5c1a0657a983859dc58a6'
+STRIPE_SECRET_KEY = 'sk_test_51P4Iv3GaYUViSCv6JTFRVWJiCBJthImtMAjpao36Gwdp2KKGaEoHv2sH911y69WY3MmhXqRiHHnzzChoJ2yVjQYD00KttHlam2'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51P4Iv3GaYUViSCv6V4hwpO8sVgEQLer2R05CAfbcxR2lqqbcRy7B7o1wxga628bvkN9WE2cMGZhdjkYFq6g7AgMv00s11kKK8u'
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

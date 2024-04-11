@@ -18,7 +18,7 @@ import secrets
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateCheckout(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def post(self,request):
         user = self.request.user
         cart = Cart.objects.get(user=user)
