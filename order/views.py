@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
+
 from django.conf import settings
 import stripe
 import secrets
@@ -18,7 +20,7 @@ import secrets
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateCheckout(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def post(self,request):
         user = self.request.user
         cart = Cart.objects.get(user=user)
@@ -46,17 +48,17 @@ class CreateCheckout(APIView):
             }
             line_items.append(line_item)
         try:
-            token = secrets.token_hex(16) 
-            base_url = request.scheme + '://' + request.get_host()
-            checkout_session = stripe.checkout.Session.create(
+             token = secrets.token_hex(16) 
+             base_url = request.scheme + '://' + request.get_host()
+             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,  
                 mode='payment',
                 success_url= f'{base_url}/orders/create?token={token}&user={user.id}',
                 cancel_url= f'{base_url}/orders/create',
                 )
-            pToken = PaymentToken(user=user,Ptoken=token,status=True)
-            pToken.save()
+             pToken = PaymentToken(user=user,Ptoken=token,status=True)
+             pToken.save()
         except AuthenticationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
