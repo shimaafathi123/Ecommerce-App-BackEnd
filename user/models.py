@@ -14,6 +14,7 @@ def user_directory_path(instance, filename):
     return f'accounts/users/{filename}'
 
 class User(AbstractUser):
+    username = models.CharField(max_length=500, null=True, blank=True)
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=500, null=True, blank=True)
     phone = models.CharField(max_length=500)
@@ -23,7 +24,6 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     
-  
 
     def save(self, *args, **kwargs):
         if not self.full_name:
@@ -33,10 +33,10 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE )
-    image = models.ImageField(upload_to='accounts/users/', default='default/default-user.jpg', null=True, blank=True)
-    email = models.EmailField(unique=True,null=True, blank=True)
-    full_name = models.CharField(max_length=500, null=True, blank=True)
-    phone = models.CharField(max_length=500,null=True, blank=True)
+    image = models.ImageField(upload_to='accounts/users/', default='default/default-user.webp', null=True, blank=True)
+    emailprofile = models.EmailField(unique=True,null=True, blank=True)
+    full_name_profile = models.CharField(max_length=500, null=True, blank=True)
+    phoneprofile = models.CharField(max_length=500,null=True, blank=True )
     about = models.TextField(null=True, blank=True)
     gender = models.CharField(max_length=500, choices=GENDER_CHOICES, null=True, blank=True)
     country = models.CharField(max_length=1000, null=True, blank=True)
@@ -51,37 +51,28 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-# def save_user_profile(sender, instance, **kwargs):
-#      #profile, created = Profile.objects.get_or_create(user=instance)
-#      #profile.save()  
-#     #user = instance
-#     #profile = instance.profile
-#     #user.full_name = profile.full_name
-#     #user.email = profile.email
-#     #user.phone = profile.phone
-#     #instance.profile.save()
-#     #user.save()
+def save_user_profile(sender, instance,created, **kwargs):
+     #profile, created = Profile.objects.get_or_create(user=instance)
+     #profile.save()  
+    #user = instance
+    #profile = instance.profile
+    #user.full_name = profile.full_name
+    #user.email = profile.email
+    #user.phone = profile.phone
+    #instance.profile.save()
+    #user.save()
+    updated=not created
+    if updated:  
+      profile = instance.user.profile
+      print(profile.emailprofile)
+      print(profile)
+      User = get_user_model()
     
-      
-#     profile = instance.user.profile
-#     print(profile.email)
-#     print(profile)
-#     User = get_user_model()
-    
-#     User.objects.filter(pk=instance.pk).update(
-#         full_name=profile.full_name,
-#         email=profile.email,  # Update user's email based on profile's email
-#         phone=profile.phone
-#     )
-def save_user_profile(sender, instance, **kwargs):
-    if hasattr(instance, 'profile'):
-        profile = instance.profile
-        User = get_user_model()
-        User.objects.filter(pk=instance.pk).update(
-            full_name=profile.full_name,
-            email=profile.email,
-            phone=profile.phone
-        )
+      User.objects.filter(pk=instance.pk).update(
+        full_name=profile.full_name_profile,
+        email=profile.emailprofile,  # Update user's email based on profile's email
+        phone=profile.phoneprofile
+      )
     
 
 post_save.connect(create_user_profile, sender=User)

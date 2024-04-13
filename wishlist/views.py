@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Wishlist, Wishlist_Item
 from .serializers import WishListSerializer, EditWishlistItemSerializer
 
+
 # Create your views here.
 class user_wishlist(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -53,4 +54,4 @@ class WishlistItem(generics.CreateAPIView, generics.RetrieveDestroyAPIView):
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Wishlist_Item.DoesNotExist:
-            return Response({"error": "wishList item doesn't exist"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response({"error": "WishList Item doesn't exist"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

@@ -20,7 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('full_name', 'email', 'phone', 'password', 'password2')
+        fields = ( 'full_name', 'email', 'phone', 'password', 'password2')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -33,8 +33,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             phone=validated_data['phone']
         )
+        print(user.full_name)
         email_username, _ = user.email.split('@')
         user.username = email_username
+        print(user.username)
         user.set_password(validated_data['password'])
         user.save()
         return user
@@ -48,7 +50,7 @@ class ProfileSerializer(serializers.ModelSerializer):
    # image = Base64ImageField()
     class Meta:
         model = Profile
-        fields = [ 'full_name','email','phone', 'about', 'gender', 'country', 'city', 'state', 'address', 'date']
+        fields = [ 'full_name_profile','emailprofile','phoneprofile', 'about', 'gender', 'country', 'city', 'state', 'address', 'date']
         #fields = '__all__'
 
     def to_representation(self, instance):
@@ -56,5 +58,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         response['user'] = UserSerializer(instance.user).data
         return response
     
-class PasswordResetSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+#class PasswordResetSerializer(serializers.Serializer):
+    #email = serializers.EmailField()
+    
+    #admin---------------------------------------------------------------------------
+    
+        
+    def get_User(self,obj):
+        items = obj.user
+        serializer = UserSerializer(items,many=False)
+        return serializer.data

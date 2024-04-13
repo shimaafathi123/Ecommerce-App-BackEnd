@@ -34,10 +34,10 @@ class UpdateCartItemView(generics.UpdateAPIView):
 class CartDetailView(generics.RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = 'user'
 
     def get_queryset(self):
         user_id = self.request.user.id
+        print(user_id)
         return Cart.objects.filter(user=user_id)
 
 
@@ -48,9 +48,9 @@ class DeleteCartItemView(generics.DestroyAPIView):
     def delete(self, request, pk, *args, **kwargs):
         try:
             instance = self.get_object()
-            product = instance.product
-            product.quantity += instance.quantity
-            product.save()
+            Product = instance.product
+            Product.quantity += instance.quantity
+            Product.save()
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except CartItem.DoesNotExist:

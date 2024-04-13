@@ -1,11 +1,23 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from user.serializer import MyTokenObtainPairSerializer, ProfileSerializer, RegisterSerializer, UserSerializer
 from user.models import Profile, User
+
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
+ 
+ 
+from django.contrib.auth import get_user_model
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -33,8 +45,64 @@ def profile(request):
         serializer = ProfileSerializer(user.profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
-        serializer = ProfileSerializer(user.profile, data=request.data)
+        data=request.data
+       # if 'image' in request.data:
+            #user.image = request.FILES.get('image')
+        #data.image=request.FILES.get('image')
+        #data['image'] = request.FILES['image']
+        serializer = ProfileSerializer(user.profile, data= data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    if request.method == 'POST':
+        # Retrieve JSON data from the request body
+        data = json.loads(request.body)
+        # Pass the JSON data to the PasswordChangeForm
+        form = PasswordChangeForm(user=request.user, data=data)
+        
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important for maintaining user's session
+            return JsonResponse({'success': 'Password has been changed successfully.'})
+        else:
+            print(form.errors)
+            return JsonResponse({'error': form.errors}, status=400)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed.'}, status=405)
+    
+    #admin-----------------------------------------------------------------------
+User = get_user_model()
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_users(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        user.delete()
+        return Response({'message': 'User deleted successfully'})
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_user(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)

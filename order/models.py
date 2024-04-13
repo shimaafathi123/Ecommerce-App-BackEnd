@@ -1,9 +1,15 @@
 from django.db import models
 from product.models import Product
 from user.models import Profile
+from user.models import User
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
+import uuid
+from django.utils import timezone
+from datetime import timedelta
+
+
 
 User = get_user_model()
 
@@ -13,9 +19,11 @@ class Order(models.Model):
     DELIVERED = "delivered"
     CANCELED = "canceled"
     STATUS_CHOICES = ((PENDING, "pending"), (SHIPPED, "shipped"), (DELIVERED, "delivered"), (CANCELED, "canceled"))
-
+    
+    transaction_id = models.UUIDField(default=uuid.uuid4, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
+    delivered_date = models.DateTimeField(default=timezone.now() + timedelta(days=3), editable=False)
     shipping_address = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -59,3 +67,12 @@ class OrderItem(models.Model):
         super(OrderItem, self).save(*args, **kwargs)
         self.order.total_price += self.price
         self.order.save()
+
+class PaymentToken(models.Model):
+    Ptoken = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.BooleanField()
+    
+
+    def __str__(self):
+        return self.Ptoken
