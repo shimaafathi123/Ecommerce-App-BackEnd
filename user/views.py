@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from user.serializer import MyTokenObtainPairSerializer, ProfileSerializer, RegisterSerializer, UserSerializer
@@ -15,6 +15,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
+ 
+ 
+from django.contrib.auth import get_user_model
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -73,3 +76,33 @@ def change_password(request):
             return JsonResponse({'error': form.errors}, status=400)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed.'}, status=405)
+    
+    #admin-----------------------------------------------------------------------
+User = get_user_model()
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_users(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        user.delete()
+        return Response({'message': 'User deleted successfully'})
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_user(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
