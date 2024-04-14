@@ -58,8 +58,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         response['user'] = UserSerializer(instance.user).data
         return response
     
-#class PasswordResetSerializer(serializers.Serializer):
-    #email = serializers.EmailField()
+ 
     
     #admin---------------------------------------------------------------------------
     

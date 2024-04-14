@@ -62,20 +62,35 @@ def profile(request):
 @permission_classes([IsAuthenticated])
 def change_password(request):
     if request.method == 'POST':
-        # Retrieve JSON data from the request body
+       
         data = json.loads(request.body)
-        # Pass the JSON data to the PasswordChangeForm
+     
         form = PasswordChangeForm(user=request.user, data=data)
         
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important for maintaining user's session
+            update_session_auth_hash(request, user)   
             return JsonResponse({'success': 'Password has been changed successfully.'})
         else:
             print(form.errors)
             return JsonResponse({'error': form.errors}, status=400)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed.'}, status=405)
+    
+#@login_required
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user_info(request):
+     
+    user = request.user
+    print(user)
+    user_info = {
+        'username': user.username,
+        'fullname':user.full_name
+      #  'email': user.email,
+         
+    }
+    return JsonResponse(user_info)
     
     #admin-----------------------------------------------------------------------
 User = get_user_model()

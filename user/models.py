@@ -52,15 +52,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 def save_user_profile(sender, instance,created, **kwargs):
-     #profile, created = Profile.objects.get_or_create(user=instance)
-     #profile.save()  
-    #user = instance
-    #profile = instance.profile
-    #user.full_name = profile.full_name
-    #user.email = profile.email
-    #user.phone = profile.phone
-    #instance.profile.save()
-    #user.save()
     updated=not created
     if updated:  
       profile = instance.user.profile
@@ -70,7 +61,7 @@ def save_user_profile(sender, instance,created, **kwargs):
     
       User.objects.filter(pk=instance.pk).update(
         full_name=profile.full_name_profile,
-        email=profile.emailprofile,  # Update user's email based on profile's email
+        email=profile.emailprofile,   
         phone=profile.phoneprofile
       )
     
