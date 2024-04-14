@@ -26,6 +26,9 @@ class AddToCartSerializer(serializers.ModelSerializer):
         cart_item.save()
         return cart_item
 
+from rest_framework import serializers
+from .models import CartItem
+
 class UpdateCartSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -39,7 +42,7 @@ class UpdateCartSerializer(serializers.ModelSerializer):
         
         if action == 'INCREASE':
             instance.quantity += 1
-        elif action == 'DECREASE' and instance.quantity > 0:
+        elif action == 'DECREASE' and instance.quantity > 1:  # Corrected condition
             instance.quantity -= 1
         instance.save()
         
@@ -47,6 +50,7 @@ class UpdateCartSerializer(serializers.ModelSerializer):
             instance.delete()
 
         return instance
+
     
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()

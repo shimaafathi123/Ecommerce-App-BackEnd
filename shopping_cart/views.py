@@ -35,11 +35,8 @@ class CartDetailView(generics.RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user_id = self.request.user.id
-        print(user_id)
-        return Cart.objects.filter(user=user_id)
-
+    queryset = Cart.objects.all()
+    lookup_field = 'pk'
 
 class DeleteCartItemView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
