@@ -12,7 +12,9 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User
 
 from django.conf import settings
+from .models import PaymentToken
 import stripe
+from stripe.error import AuthenticationError
 import secrets
 
 #------------------------------------------------------
@@ -29,7 +31,7 @@ class CreateCheckout(APIView):
         if not cart_items:
             return Response({"detail": "Cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
         for item in cart_items:
-            if item.quantity > item.product.available_quantity:
+            if item.quantity > item.product.quantity:
                 return Response({'detail': f"Sorry, we do not have enough stock for {item.product.name}"}, status=status.HTTP_400_BAD_REQUEST)
 
         line_items = []
