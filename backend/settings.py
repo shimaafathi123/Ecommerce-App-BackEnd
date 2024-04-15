@@ -54,10 +54,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    # Add other origins as needed
-]
+CORS_ALLOWED_ORIGINS = ["*"]
 
 AUTH_USER_MODEL = 'user.User'#when use abstractuser model
 
