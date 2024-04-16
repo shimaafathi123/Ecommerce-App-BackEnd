@@ -12,23 +12,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-STRIPE_SECRET_KEY = 'your_stripe_secret_key_here'
-
+BASE_DIR = Path(_file_).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sl$tdf82tnh*#!clf(0wgf$fr_!cw^l!yx-sig8y%ev*q9r7k+'
+SECRET_KEY = os.getenv('SECRET_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']#.vercel.app
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,7 +55,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    # Add other origins as needed
+]
 
 AUTH_USER_MODEL = 'user.User'#when use abstractuser model
 
@@ -115,19 +119,27 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'iti_ecommerce_db',
+#         'USER':'root',
+#         'PASSWORD':'root',
+#         'Host':'127.0.0.1',
+#         'PORT':'3306'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'iti_ecommerce_db',
-        'USER':'root',
-        'PASSWORD':'root',
-        'Host':'127.0.0.1',
-        'PORT':'3306'
+        'ENGINE': os.getenv("ENGINE"),
+        'NAME': os.getenv('MYSQLDATABASE'),
+        'USER': os.getenv('MYSQLUSER'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD'),
+        'HOST': os.getenv('MYSQLHOST'),
+        'PORT': os.getenv('MYSQLPORT'),
     }
 }
-
-STRIPE_SECRET_KEY = 'sk_test_51P4Iv3GaYUViSCv6JTFRVWJiCBJthImtMAjpao36Gwdp2KKGaEoHv2sH911y69WY3MmhXqRiHHnzzChoJ2yVjQYD00KttHlam2'
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51P4Iv3GaYUViSCv6V4hwpO8sVgEQLer2R05CAfbcxR2lqqbcRy7B7o1wxga628bvkN9WE2cMGZhdjkYFq6g7AgMv00s11kKK8u'
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
