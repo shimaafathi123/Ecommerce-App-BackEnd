@@ -31,12 +31,32 @@ class UpdateCartItemView(generics.UpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
 class CartDetailView(generics.RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
-    queryset = Cart.objects.all()
-    lookup_field = 'pk'
+    
+    def get_object(self):
+        # Get the cart of the logged-in user
+        return self.request.user.cart
+
+# class CartDetailView(generics.RetrieveAPIView):
+#     serializer_class = CartSerializer
+#     permission_classes = [IsAuthenticated]
+
+
+#     #   queryset = Cart.objects.all()
+#     # lookup_field = 'pk'
+# # class CartDetailView(generics.RetrieveAPIView):
+# #     serializer_class = CartSerializer
+# #     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Cart.objects.filter(user=user)
+
+#     lookup_field = 'user__id'
 
 class DeleteCartItemView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]

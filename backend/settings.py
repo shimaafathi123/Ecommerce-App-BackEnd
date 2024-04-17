@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://ecommerce-2d6e7.web.app",
+    "http://localhost:5173"
     # Add other origins as needed
 ]
 
