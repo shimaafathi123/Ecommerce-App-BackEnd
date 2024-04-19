@@ -19,7 +19,6 @@ import secrets
 
 #------------------------------------------------------
 #payment
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateCheckout(APIView):
     permission_classes = [IsAuthenticated]
