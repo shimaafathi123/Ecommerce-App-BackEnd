@@ -1,5 +1,5 @@
 from django.urls import path
-from user.views import register, obtain_token, profile,change_password,list_users, delete_user, get_user, get_current_user_info
+from user.views import register, obtain_token, profile,change_password,list_users, delete_user, get_user, get_current_user_info,  search_products
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -11,5 +11,7 @@ urlpatterns = [
     path('admin/users/', list_users, name='list_users'),
     path('admin/users/<int:user_id>/', get_user, name='get_user'),
     path('admin/users/<int:user_id>/delete/', delete_user, name='delete_user'),
+    
+     path('search/', search_products, name='search_products'),
 
 ]

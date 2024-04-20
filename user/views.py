@@ -19,6 +19,12 @@ import json
  
 from django.contrib.auth import get_user_model
 
+
+from django.http import JsonResponse
+from django.db.models import Q
+from product.models import Product
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
@@ -121,3 +127,12 @@ def get_user(request, user_id):
         return Response(serializer.data)
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=404)
+    #search-----------------------------------------------------------
+def search_products(request):
+    query = request.GET.get('query', '')
+    if query:
+        results = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        serialized_results = [{'id': product.id, 'name': product.name} for product in results]
+        return JsonResponse({'results': serialized_results})
+    else:
+        return JsonResponse({'results': []})
