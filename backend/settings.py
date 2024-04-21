@@ -12,30 +12,30 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-###from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
-###load_dotenv()
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-SECRET_KEY = '^aa)8na0*0u*!ly+ko)ij75=5+!y308&#w&nvw3c!2%i2u4#jx'
+#SECRET_KEY = '^aa)8na0*0u*!ly+ko)ij75=5+!y308&#w&nvw3c!2%i2u4#jx'
 # SECURITY WARNING: keep the secret key used in production secret!
-###SECRET_KEY = os.getenv('SECRET_KEY')
-####STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-####STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-####ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'jazzmin', #to override django admin make it more pretty
+ 
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,27 +120,27 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'iti_ecommerce_db',
-         'USER':'root',
-         'PASSWORD':'',
-         'Host':'127.0.0.1',
-         'PORT':'3306'
-     }
- }
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': 'iti_ecommerce_db',
+#          'USER':'root',
+#          'PASSWORD':'',
+#          'Host':'127.0.0.1',
+#          'PORT':'3306'
+#      }
+#  }
 
-#DATABASES = {
-   # 'default': {
-     #   'ENGINE': os.getenv("ENGINE"),
-      #  'NAME': os.getenv('MYSQLDATABASE'),
-       # 'USER': os.getenv('MYSQLUSER'),
-      #  'PASSWORD': os.getenv('MYSQLPASSWORD'),
-     #   'HOST': os.getenv('MYSQLHOST'),
-    #    'PORT': os.getenv('MYSQLPORT'),
-   # }
-#}
+DATABASES = {
+   'default': {
+       'ENGINE': os.getenv("ENGINE"),
+       'NAME': os.getenv('MYSQLDATABASE'),
+       'USER': os.getenv('MYSQLUSER'),
+       'PASSWORD': os.getenv('MYSQLPASSWORD'),
+       'HOST': os.getenv('MYSQLHOST'),
+       'PORT': os.getenv('MYSQLPORT'),
+   }
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -170,7 +170,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-###APPEND_SLASH = False
+APPEND_SLASH = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -199,7 +199,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # }
 
 
-# # JAZZMIN_UI_TWEAKS = {
+# JAZZMIN_UI_TWEAKS = {
 #     "navbar_small_text": False,
 #     "footer_small_text": False,
 #     "body_small_text": True,
@@ -229,4 +229,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         "danger": "btn-danger",
 #         "success": "btn-success"
 #     }
-#  }
+# }
