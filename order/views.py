@@ -78,7 +78,7 @@ class user_orders(APIView):
 
 
 class create_order(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user_pk = self.request.GET.get('user')
