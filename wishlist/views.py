@@ -31,7 +31,7 @@ class create_item(generics.CreateAPIView):
 
 
 class WishlistItem(generics.CreateAPIView, generics.RetrieveDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = EditWishlistItemSerializer
 
     def get_queryset(self):
