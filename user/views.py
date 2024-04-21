@@ -127,7 +127,7 @@ def get_user(request, user_id):
         return Response(serializer.data)
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=404)
-    #search-----------------------------------------------------------
+    ##search-----------------------------------------------------------
 def search_products(request):
     query = request.GET.get('query', '')
     if query:
