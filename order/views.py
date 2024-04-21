@@ -5,12 +5,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import OrderSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from datetime import timedelta
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
-
+# from django.contrib.auth.models import User
+from user.models import User
 from django.conf import settings
 from .models import PaymentToken
 import stripe
@@ -19,6 +19,7 @@ import secrets
 
 #------------------------------------------------------
 #payment
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateCheckout(APIView):
     permission_classes = [IsAuthenticated]
@@ -55,8 +56,8 @@ class CreateCheckout(APIView):
                 payment_method_types=['card'],
                 line_items=line_items,  
                 mode='payment',
-                success_url= f'{base_url}/orders/create?token={token}&user={user.id}',
-                cancel_url= f'{base_url}/orders/create',
+               success_url=f'{base_url}/orders/create/?user={request.user.pk}',
+               cancel_url=f'{base_url}/cart/',
                 )
              pToken = PaymentToken(user=user,Ptoken=token,status=True)
              pToken.save()
@@ -77,7 +78,7 @@ class user_orders(APIView):
 
 
 class create_order(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         user_pk = self.request.GET.get('user')
@@ -103,7 +104,7 @@ class create_order(APIView):
             order, data={'user': user.pk, 'order_items': [], **request.data})
         if serializer.is_valid():
             serializer.save()
-            return redirect('http://localhost:3000/orders')
+            return redirect('https://ecommerce-2d6e7.web.app/order')
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 
