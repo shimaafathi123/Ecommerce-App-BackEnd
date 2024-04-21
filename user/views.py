@@ -128,6 +128,7 @@ def get_user(request, user_id):
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=404)
     ##search-----------------------------------------------------------
+
 def search_products(request):
     query = request.GET.get('query', '')
     if query:
@@ -136,3 +137,4 @@ def search_products(request):
         return JsonResponse({'results': serialized_results})
     else:
         return JsonResponse({'results': []})
+     
